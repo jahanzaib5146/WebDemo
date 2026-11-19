@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Vercel + Render Test App</title>
+  <style>
+    body { font-family: sans-serif; max-width: 500px; margin: 50px auto; padding: 20px; }
+    input { padding: 8px; width: 70%; }
+    button { padding: 8px 15px; cursor: pointer; }
+    ul { margin-top: 20px; padding-left: 20px; }
+    li { margin-bottom: 8px; }
+  </style>
+</head>
+<body>
+  <h2>Vercel + Render Connection Test</h2>
+  
+  <div>
+    <input type="text" id="msgInput" placeholder="Write a test message..." />
+    <button onclick="sendMessage()">Send</button>
+  </div>
+
+  <ul id="msgList">Loading...</ul>
+
+  <script>
+    // Render par deploy karne ke baad apna live URL yahan paste karein
+    const API_URL = "http://localhost:5000/api/messages"; 
+
+    async function fetchMessages() {
+      try {
+        const res = await fetch(API_URL);
+        const data = await res.json();
+        const list = document.getElementById('msgList');
+        list.innerHTML = data.map(m => `<li>${m.text}</li>`).join('');
+      } catch (err) {
+        document.getElementById('msgList').innerHTML = "Error connecting to backend!";
+      }
+    }
+
+    async function sendMessage() {
+      const input = document.getElementById('msgInput');
+      if (!input.value) return;
+
+      await fetch(API_URL, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ text: input.value })
+      });
+
+      input.value = '';
+      fetchMessages();
+    }
+
+    fetchMessages();
+  </script>
+</body>
+</html>
