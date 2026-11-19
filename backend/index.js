@@ -10,7 +10,7 @@ app.use(express.json());
 
 // Dummy data (Memory mein store hoga)
 let messages = [
-  { id: 1, text: "Hello from Render Backend!" }
+  { id: 1, text: "Hello from Railway Backend!" }
 ];
 
 // Test Route
